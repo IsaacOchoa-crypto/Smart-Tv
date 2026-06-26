@@ -137,7 +137,7 @@ const TVCanvas: React.FC = () => {
         }}
         dpr={1}
         shadows={false}
-        camera={{ position: [5, 2, 6], fov: 50 }}
+        camera={{ position: [0, 5, 25], fov: 50 }}
       >
         <ambientLight intensity={1} />
         <Center top position={[0, -1, 0]}>
