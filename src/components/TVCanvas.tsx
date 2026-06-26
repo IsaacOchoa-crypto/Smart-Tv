@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Center } from '@react-three/drei';
 import * as THREE from 'three';
@@ -51,6 +51,7 @@ useGLTF.preload(urlModelo);
 const TVCanvas: React.FC = () => {
   const controlsRef = useRef<OrbitControlsImpl>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isAutoRotate, setIsAutoRotate] = useState(false);
 
   const handleAction = (action: 'up' | 'down' | 'left' | 'right' | 'zoomIn' | 'zoomOut') => {
     const controls = controlsRef.current;
@@ -136,7 +137,7 @@ const TVCanvas: React.FC = () => {
         }}
         dpr={1}
         shadows={false}
-        camera={{ position: [0, 2, 5], fov: 50 }}
+        camera={{ position: [5, 2, 6], fov: 50 }}
       >
         <ambientLight intensity={1} />
         <Center top position={[0, -1, 0]}>
@@ -144,12 +145,23 @@ const TVCanvas: React.FC = () => {
         </Center>
         <OrbitControls
           ref={controlsRef}
-          autoRotate={false}
+          autoRotate={isAutoRotate}
           enableDamping={true}
           enableZoom={false}
           enablePan={false}
         />
       </Canvas>
+
+      {/* Botón de Auto-Rotación */}
+      <div className="absolute top-28 right-8 z-20 pointer-events-auto">
+        <button 
+          tabIndex={0}
+          className={`px-6 py-3 rounded-full border border-white/20 text-xl font-bold transition-colors outline-none focus:ring-2 focus:ring-white ${isAutoRotate ? 'bg-blue-600 text-white hover:bg-blue-500' : 'bg-black/80 text-white hover:bg-gray-700'}`}
+          onClick={() => setIsAutoRotate(!isAutoRotate)}
+        >
+          {isAutoRotate ? 'Detener Rotación' : 'Rotación Automática'}
+        </button>
+      </div>
 
       {/* Controles en Pantalla (PC / TV) */}
       <div className="absolute bottom-8 right-8 flex flex-col gap-3 z-20 pointer-events-auto">
