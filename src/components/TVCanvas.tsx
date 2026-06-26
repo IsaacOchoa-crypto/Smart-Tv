@@ -4,7 +4,7 @@ import { OrbitControls, useGLTF, Center } from '@react-three/drei';
 import * as THREE from 'three';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
-const urlModelo = '/Casita%20y%20monas1.glb';
+const urlModelo = '/casita.glb';
 
 const ModeloPrincipal = () => {
   const { scene } = useGLTF(urlModelo);
