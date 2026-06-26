@@ -5,8 +5,8 @@ import TVCanvas from './components/TVCanvas';
 const App: React.FC = () => {
   return (
     <div className="relative w-screen h-screen bg-black overflow-hidden flex items-center justify-center" style={{ backgroundColor: '#000' }}>
-      {/* Contenedor 16:9 forzado para asegurar proporción en cualquier TV */}
-      <div className="relative w-full max-w-[177.78vh] aspect-video bg-black overflow-hidden" style={{ backgroundColor: '#000' }}>
+      {/* Contenedor adaptado a la pantalla completa sin usar aspect-ratio moderno */}
+      <div className="relative w-full h-full bg-black overflow-hidden" style={{ backgroundColor: '#000' }}>
         
         {/* UI principal para navegar con D-Pad */}
         <TVInterface />

@@ -6,9 +6,9 @@ import legacy from '@vitejs/plugin-legacy';
 export default defineConfig({
   plugins: [
     react(),
-    // Configuración Legacy para soportar TVs antiguas con Chromium 68+
+    // Configuración Legacy para soportar TVs antiguas con Chromium 53 (WebOS 4.5)
     legacy({
-      targets: ['chrome >= 68'],
+      targets: ['chrome >= 50'],
       additionalLegacyPolyfills: ['regenerator-runtime/runtime']
     })
   ],
