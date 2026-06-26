@@ -1,38 +1,52 @@
 import React, { useEffect, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, useGLTF } from '@react-three/drei';
+import { OrbitControls, useGLTF, Center } from '@react-three/drei';
 import * as THREE from 'three';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
+const urlModelo = '/Casita%20y%20monas1.glb';
+
 const ModeloPrincipal = () => {
-  const { scene } = useGLTF('/Casita y monas1.glb');
+  const { scene } = useGLTF(urlModelo);
 
   useEffect(() => {
     scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
         if (mesh.material) {
-          const originalMaterial = mesh.material as THREE.Material & {
-            color?: THREE.Color;
-            map?: THREE.Texture | null;
-          };
+          if (Array.isArray(mesh.material)) {
+            mesh.material = mesh.material.map((mat) => {
+              const orig = mat as THREE.Material & { color?: THREE.Color; map?: THREE.Texture | null };
+              const newMat = new THREE.MeshBasicMaterial({
+                color: orig.color || new THREE.Color(0xffffff),
+                map: orig.map || null,
+              });
+              orig.dispose();
+              return newMat;
+            });
+          } else {
+            const originalMaterial = mesh.material as THREE.Material & {
+              color?: THREE.Color;
+              map?: THREE.Texture | null;
+            };
 
-          const newMaterial = new THREE.MeshBasicMaterial({
-            color: originalMaterial.color || new THREE.Color(0xffffff),
-            map: originalMaterial.map || null,
-          });
+            const newMaterial = new THREE.MeshBasicMaterial({
+              color: originalMaterial.color || new THREE.Color(0xffffff),
+              map: originalMaterial.map || null,
+            });
 
-          mesh.material = newMaterial;
-          originalMaterial.dispose();
+            mesh.material = newMaterial;
+            originalMaterial.dispose();
+          }
         }
       }
     });
   }, [scene]);
 
-  return <primitive object={scene} position={[0, -1, 0]} scale={1} />;
+  return <primitive object={scene} />;
 };
 
-useGLTF.preload('/Casita y monas1.glb');
+useGLTF.preload(urlModelo);
 
 const TVCanvas: React.FC = () => {
   const controlsRef = useRef<OrbitControlsImpl>(null);
@@ -124,7 +138,10 @@ const TVCanvas: React.FC = () => {
         shadows={false}
         camera={{ position: [0, 2, 5], fov: 50 }}
       >
-        <ModeloPrincipal />
+        <ambientLight intensity={1} />
+        <Center top position={[0, -1, 0]}>
+          <ModeloPrincipal />
+        </Center>
         <OrbitControls
           ref={controlsRef}
           autoRotate={false}
